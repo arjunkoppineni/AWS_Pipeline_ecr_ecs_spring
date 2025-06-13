@@ -4,7 +4,7 @@ Resources:
   - TargetService:
       Type: AWS::ECS::Service
       Properties:
-        TaskDefinition: "arn:aws:ecs:us-east-1:216989142685:task-definition/exam-TD:1"
+        TaskDefinition: "arn:aws:ecs:us-east-1:216989142685:task-definition/harish-task:1"
         LoadBalancerInfo:
-          ContainerName: "exp-container"
+          ContainerName: "hacontainer"
           ContainerPort: 8080
