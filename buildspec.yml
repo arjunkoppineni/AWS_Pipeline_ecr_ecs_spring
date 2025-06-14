@@ -24,12 +24,15 @@ phases:
   post_build:
     commands:
       - echo Pushing Docker image to Amazon ECR...
-      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
-      - echo Writing imagedefinitions.json...
-      - printf '[{"name":"hacontainer","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
-      - echo Writing appspec.yml...
+      - docker push ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}
+      - echo Creating final deployment files...
+      - mkdir -p k8s-out
+      - sed "s|IMAGE_PLACEHOLDER|${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}|g" k8s/deployment.yaml > k8s-out/deployment.yaml
+      - cp k8s/service.yaml k8s-out/service.yaml
+      - ls -R
 
 artifacts:
+  base-directory: k8s-out
   files:
-    - imagedefinitions.json
-    - appspec.yml
+    - deployment.yaml
+    - service.yaml
